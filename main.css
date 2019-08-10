@@ -1,0 +1,32 @@
+body {
+  background-image: url("./assets/beautiful-clouds.jpg");
+  background-repeat: no-repeat;
+  background-size: 1440px 700px;
+  font-family: 'Blinker', sans-serif;
+  color: white;
+}
+
+h1 {
+  font-size: 100px;
+}
+
+#weatherIcon, #weatherState, #weatherTemp, #newState {
+  display: flex;
+  justify-content: center;
+}
+
+#weatherIcon {
+  margin-top: 34px;
+}
+
+#weatherState {
+  margin-top: 96px;
+}
+
+#weatherTemp {
+  margin-top: 16px;
+}
+
+#newState {
+  margin-top: 101px;
+}
