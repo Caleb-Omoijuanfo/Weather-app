@@ -1,8 +1,10 @@
 "use strict";
 const app = document.getElementById("app");
-const weather = document.getElementById("weatherIcon")
+const weatherIcon = document.getElementById("weatherIcon")
 const weatherState = document.getElementById("weatherState")
 const weatherTemp = document.getElementById("weatherTemp")
+const weatherDescription = document.getElementById('weatherDescription')
+const newState = document.getElementById('newState');
 
 //FUNCTIONS
 //
@@ -20,7 +22,7 @@ function showWeather(latitude, longitude){
     console.log(JSON.stringify(myJson));
 
     let temperature = document.createElement("h1");
-    temperature.innerHTML = myJson.main.temp;
+    temperature.innerHTML = `${myJson.main.temp}°C`;
 
     let state = document.createElement("p");
     state.innerHTML = `${myJson.name}, ${myJson.sys.country}`;
@@ -28,19 +30,46 @@ function showWeather(latitude, longitude){
     let description = document.createElement("p");
     description.innerHTML = myJson.weather[0].description;
 
-    let icon = document.createElement("p");
-    icon.innerHTML = myJson.weather[0].icon;
+    let iconContainer = document.createElement("p");
+    let icon = document.createElement("img");
+    icon.src = `http://openweathermap.org/img/wn/${myJson.weather[0].icon}@2x.png`;
 
-
-    app.appendChild(weatherTemp);
+    app.appendChild(weatherIcon);
+    app.appendChild(weatherDescription);
     app.appendChild(weatherState);
-    app.appendChild(weather);
-    weatherTemp.appendChild(temperature);
+    app.appendChild(weatherTemp);
+    weatherIcon.appendChild(iconContainer);
+    iconContainer.appendChild(icon);
+    weatherDescription.appendChild(description);
     weatherState.appendChild(state);
-    weather.appendChild(icon);
-    weather.appendChild(description);
+    weatherTemp.appendChild(temperature);
+
   });
 
+}
+
+function changeLocation() {
+  let form = document.createElement('form');
+  let inputGroup = document.createElement('div');
+  inputGroup.setAttribute('class', 'input-group mb-3')
+
+  let input = document.createElement('input');
+  input.setAttribute('type', 'text');
+  input.class = "form-control";
+  input.placeholder = "Enter State";
+
+  let inputGroupAppend = document.createElement('input-group-append');
+  let span = document.createElement('span');
+  span.class = "input-group-text";
+  span.id = "basic-addon2";
+  span.innerHTML = 'Submit';
+
+  app.appendChild(newState);
+  inputGroupAppend.appendChild(span);
+  inputGroup.appendChild(inputGroupAppend);
+  inputGroup.appendChild(input);
+  form.appendChild(inputGroup);
+  newState.appendChild(form);
 }
 
 //FUNCTION TO DISPLAY THE ACTUAL ERROR AND NOT JUST THE ERROR CODE.
@@ -65,8 +94,8 @@ if (navigator.geolocation) {
       let lat = startPos.coords.latitude;
       let long = startPos.coords.longitude;
 
-      // showWeather(lat, long);
-
+      showWeather(lat, long);
+      changeLocation();
     };
 
     var geoError = function(error) {
