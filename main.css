@@ -10,7 +10,7 @@ h1 {
   font-size: 100px;
 }
 
-#weatherIcon, #weatherState, #weatherTemp, #newState {
+#weatherIcon, #weatherState, #weatherTemp, #newState, #weatherDescription, #newState {
   display: flex;
   justify-content: center;
 }
@@ -28,5 +28,5 @@ h1 {
 }
 
 #newState {
-  margin-top: 101px;
+    
 }
