@@ -50,8 +50,10 @@ function showWeather(latitude, longitude){
 
 function changeLocation() {
   let form = document.createElement('form');
+
   let inputGroup = document.createElement('div');
-  inputGroup.setAttribute('class', 'input-group mb-3')
+  inputGroup.setAttribute('class', 'input-group');
+  inputGroup.class = "mb-3";
 
   let input = document.createElement('input');
   input.setAttribute('type', 'text');
@@ -59,17 +61,18 @@ function changeLocation() {
   input.placeholder = "Enter State";
 
   let inputGroupAppend = document.createElement('input-group-append');
+
   let span = document.createElement('span');
   span.class = "input-group-text";
   span.id = "basic-addon2";
   span.innerHTML = 'Submit';
 
   app.appendChild(newState);
-  inputGroupAppend.appendChild(span);
+  newState.appendChild(form);
+  form.appendChild(inputGroup);
   inputGroup.appendChild(inputGroupAppend);
   inputGroup.appendChild(input);
-  form.appendChild(inputGroup);
-  newState.appendChild(form);
+  inputGroupAppend.appendChild(span);
 }
 
 //FUNCTION TO DISPLAY THE ACTUAL ERROR AND NOT JUST THE ERROR CODE.
@@ -95,7 +98,7 @@ if (navigator.geolocation) {
       let long = startPos.coords.longitude;
 
       showWeather(lat, long);
-      changeLocation();
+      //changeLocation();
     };
 
     var geoError = function(error) {
