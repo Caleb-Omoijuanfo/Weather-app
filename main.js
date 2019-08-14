@@ -1,15 +1,26 @@
 "use strict";
-const app = document.getElementById("app");
+const app = document.getElementById("weather");
 const weatherIcon = document.getElementById("weatherIcon")
 const weatherState = document.getElementById("weatherState")
 const weatherTemp = document.getElementById("weatherTemp")
 const weatherDescription = document.getElementById('weatherDescription')
 const newState = document.getElementById('newState');
 
-//FUNCTIONS
-//
-//
 
+
+// ----------------------------------------------------------------------------
+//PAGE LOADER
+function loader(){
+  let loader = document.getElementById('loader');
+  loader.style.display = "none";
+  app.style.display = "block";
+}
+
+function setLoader(){
+  setTimeout(loader(), 3000);
+}
+
+// ----------------------------------------------------------------------------
 //DISPLAY WEATHER DETAILS
 function showWeather(latitude, longitude){
   let url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}35&lon=${longitude}&APPID=aa03c05def126fd3d1626d1ed445ef91&units=metric`;
@@ -48,33 +59,12 @@ function showWeather(latitude, longitude){
 
 }
 
-function changeLocation() {
-  let form = document.createElement('form');
 
-  let inputGroup = document.createElement('div');
-  inputGroup.setAttribute('class', 'input-group');
-  inputGroup.class = "mb-3";
+// ----------------------------------------------------------------------------
+//CHANGE LOCATION USING STATE
 
-  let input = document.createElement('input');
-  input.setAttribute('type', 'text');
-  input.class = "form-control";
-  input.placeholder = "Enter State";
 
-  let inputGroupAppend = document.createElement('input-group-append');
-
-  let span = document.createElement('span');
-  span.class = "input-group-text";
-  span.id = "basic-addon2";
-  span.innerHTML = 'Submit';
-
-  app.appendChild(newState);
-  newState.appendChild(form);
-  form.appendChild(inputGroup);
-  inputGroup.appendChild(inputGroupAppend);
-  inputGroup.appendChild(input);
-  inputGroupAppend.appendChild(span);
-}
-
+// ----------------------------------------------------------------------------
 //FUNCTION TO DISPLAY THE ACTUAL ERROR AND NOT JUST THE ERROR CODE.
 function codeConverter (code) {
   let errorCodes = ["unknown error", "permission denied", "position unavailable", "timed out"];
@@ -86,6 +76,8 @@ function codeConverter (code) {
   }
 };
 
+
+// ----------------------------------------------------------------------------
 // check for Geolocation support
 if (navigator.geolocation) {
   //Function executes when the Browser is lunched or refreshed.
@@ -97,6 +89,7 @@ if (navigator.geolocation) {
       let lat = startPos.coords.latitude;
       let long = startPos.coords.longitude;
 
+      setLoader();
       showWeather(lat, long);
       //changeLocation();
     };
