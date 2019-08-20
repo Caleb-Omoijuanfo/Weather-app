@@ -1,3 +1,4 @@
+
 "use strict";
 const app = document.getElementById("weather");
 const weatherIcon = document.getElementById("weatherIcon")
@@ -5,7 +6,6 @@ const weatherState = document.getElementById("weatherState")
 const weatherTemp = document.getElementById("weatherTemp")
 const weatherDescription = document.getElementById('weatherDescription')
 const newState = document.getElementById('newState');
-
 
 
 // ----------------------------------------------------------------------------
@@ -20,6 +20,18 @@ function setLoader(){
   setTimeout(loader(), 3000);
 }
 
+
+// ----------------------------------------------------------------------------
+//FORM CONTROL
+let form = document.querySelector('form');
+form.addEventListener('submit', (event) => {
+  changeLocation(form.elements.inputValue.value);
+  event.preventDefault();
+  //clear input field after clicking submit
+  form.elements.inputValue.value = "";
+})
+
+
 // ----------------------------------------------------------------------------
 //DISPLAY WEATHER DETAILS
 function showWeather(latitude, longitude){
@@ -30,7 +42,7 @@ function showWeather(latitude, longitude){
     return response.json();
   })
   .then(function(myJson) {
-    console.log(JSON.stringify(myJson));
+    //console.log(JSON.stringify(myJson));
 
     let temperature = document.createElement("h1");
     temperature.innerHTML = `${myJson.main.temp}°C`;
@@ -59,10 +71,50 @@ function showWeather(latitude, longitude){
 
 }
 
-
 // ----------------------------------------------------------------------------
 //CHANGE LOCATION USING STATE
+function changeLocation(city){
+  let url = `https://api.openweathermap.org/data/2.5/weather?q=${city},ng&APPID=aa03c05def126fd3d1626d1ed445ef91&units=metric`;
 
+  fetch(url)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    //console.log(JSON.stringify(myJson));
+
+    //Remove old weather and replace with new ones.
+    weatherTemp.removeChild(weatherTemp.firstChild);
+    weatherState.removeChild(weatherState.firstChild);
+    weatherDescription.removeChild(weatherDescription.firstChild);
+    weatherIcon.removeChild(weatherIcon.firstChild);
+
+    let temperature = document.createElement("h1");
+    temperature.innerHTML = `${myJson.main.temp}°C`;
+
+    let state = document.createElement("p");
+    state.innerHTML = `${myJson.name}, ${myJson.sys.country}`;
+
+    let description = document.createElement("p");
+    description.innerHTML = myJson.weather[0].description;
+
+    let iconContainer = document.createElement("p");
+    let icon = document.createElement("img");
+    icon.src = `http://openweathermap.org/img/wn/${myJson.weather[0].icon}@2x.png`;
+
+    app.appendChild(weatherIcon);
+    app.appendChild(weatherDescription);
+    app.appendChild(weatherState);
+    app.appendChild(weatherTemp);
+    weatherIcon.appendChild(iconContainer);
+    iconContainer.appendChild(icon);
+    weatherDescription.appendChild(description);
+    weatherState.appendChild(state);
+    weatherTemp.appendChild(temperature);
+
+  });
+
+}
 
 // ----------------------------------------------------------------------------
 //FUNCTION TO DISPLAY THE ACTUAL ERROR AND NOT JUST THE ERROR CODE.
@@ -91,7 +143,7 @@ if (navigator.geolocation) {
 
       setLoader();
       showWeather(lat, long);
-      //changeLocation();
+
     };
 
     var geoError = function(error) {
