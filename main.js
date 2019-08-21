@@ -78,41 +78,48 @@ function changeLocation(city){
 
   fetch(url)
   .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    //console.log(JSON.stringify(myJson));
+    if(response.status != 200){
+      alert("State does not exist");
+      return;
+    }
 
-    //Remove old weather and replace with new ones.
-    weatherTemp.removeChild(weatherTemp.firstChild);
-    weatherState.removeChild(weatherState.firstChild);
-    weatherDescription.removeChild(weatherDescription.firstChild);
-    weatherIcon.removeChild(weatherIcon.firstChild);
+    //Examine the text in the response
+    response.json().then(function(myJson) {
+      //Remove old weather and replace with new ones.
+      weatherTemp.removeChild(weatherTemp.firstChild);
+      weatherState.removeChild(weatherState.firstChild);
+      weatherDescription.removeChild(weatherDescription.firstChild);
+      weatherIcon.removeChild(weatherIcon.firstChild);
 
-    let temperature = document.createElement("h1");
-    temperature.innerHTML = `${myJson.main.temp}°C`;
+      let temperature = document.createElement("h1");
+      temperature.innerHTML = `${myJson.main.temp}°C`;
 
-    let state = document.createElement("p");
-    state.innerHTML = `${myJson.name}, ${myJson.sys.country}`;
+      let state = document.createElement("p");
+      state.innerHTML = `${myJson.name}, ${myJson.sys.country}`;
 
-    let description = document.createElement("p");
-    description.innerHTML = myJson.weather[0].description;
+      let description = document.createElement("p");
+      description.innerHTML = myJson.weather[0].description;
 
-    let iconContainer = document.createElement("p");
-    let icon = document.createElement("img");
-    icon.src = `http://openweathermap.org/img/wn/${myJson.weather[0].icon}@2x.png`;
+      let iconContainer = document.createElement("p");
+      let icon = document.createElement("img");
+      icon.src = `http://openweathermap.org/img/wn/${myJson.weather[0].icon}@2x.png`;
 
-    app.appendChild(weatherIcon);
-    app.appendChild(weatherDescription);
-    app.appendChild(weatherState);
-    app.appendChild(weatherTemp);
-    weatherIcon.appendChild(iconContainer);
-    iconContainer.appendChild(icon);
-    weatherDescription.appendChild(description);
-    weatherState.appendChild(state);
-    weatherTemp.appendChild(temperature);
+      app.appendChild(weatherIcon);
+      app.appendChild(weatherDescription);
+      app.appendChild(weatherState);
+      app.appendChild(weatherTemp);
+      weatherIcon.appendChild(iconContainer);
+      iconContainer.appendChild(icon);
+      weatherDescription.appendChild(description);
+      weatherState.appendChild(state);
+      weatherTemp.appendChild(temperature);
 
-  });
+    });
+  }
+)
+.catch(function(err) {
+  //console.log('Fetch Error :-S', err);
+});
 
 }
 
